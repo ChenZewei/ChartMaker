@@ -11,6 +11,12 @@ SchedResult::SchedResult(string name)
 	test_name = name;
 }
 
+
+string SchedResult::get_test_name()
+{
+	return test_name;
+}
+
 void SchedResult::insert_result(double utilization, uint e_time, uint s_time)
 {
 	bool exist = false;
@@ -66,7 +72,7 @@ Result SchedResult::get_result_by_utilization(double utilization)
 
 SchedResultSet::SchedResultSet() {}
 
-uint SchedResultSet::size() {return result_set.size();}
+uint SchedResultSet::size() {return sched_result_set.size();}
 
 vector<SchedResult>& SchedResultSet::get_sched_result_set() {return sched_result_set;}
 
@@ -74,7 +80,7 @@ SchedResult& SchedResultSet::get_sched_result(string test_name)
 {
 	foreach(sched_result_set, sched_result)
 	{
-		if(0 == strcmp(sched_result->test_name.data(), test_name.data())
+		if(0 == strcmp(sched_result->get_test_name().data(), test_name.data()))
 		{
 			return (*sched_result);
 		}
@@ -84,6 +90,6 @@ SchedResult& SchedResultSet::get_sched_result(string test_name)
 
 	sched_result_set.push_back(new_element);
 
-	return new_element;
+	return sched_result_set[sched_result_set.size()-1];
 }
 

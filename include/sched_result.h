@@ -13,6 +13,7 @@ class SchedResult
 		vector<Result> results;
 	public:
 		SchedResult(string name);
+		string get_test_name();
 		void insert_result(double utilization, uint e_time, uint s_time);
 		vector<Result>& get_results();
 		Result get_result_by_utilization(double utilization);
