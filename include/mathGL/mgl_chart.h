@@ -5,6 +5,8 @@
 #include <string>
 #include "types.h"
 #include "mgl2/mgl.h"
+#include "sched_result.h"
+
 
 typedef struct
 {
@@ -19,7 +21,8 @@ typedef vector<string> Dot;
 class Chart
 {
 	private:
-		vector<Chart_Data> data_set;
+		//vector<Chart_Data> data_set;
+		SchedResultSet srs;
 		mglGraph graph;
 		Color color;//already has 8 colors
 		Width width;//from 0-9
@@ -30,11 +33,12 @@ class Chart
 		~Chart(){}
 
 		void AddColor(string color);
-		void AddData(string name, double* d, int size);
-		void AddData(string name, Result_Set r_set);
+		//void AddData(string name, double* d, int size);
+		//void AddData(string name, SchedResult sr);
+		void AddData(SchedResultSet srs);
 		void SetGraphSize(int width, int height);
 		void SetGraphQual(int quality);
-		void ExportLineChart(string path, const char* title, double min, double max, int format = 0);
+		void ExportLineChart(string path, const char* title, double min, double max, double step, int format = 0);
 		void ExportJSON(string path);
 };
 

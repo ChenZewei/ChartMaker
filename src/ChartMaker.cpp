@@ -8,7 +8,7 @@
 #include "types.h"
 #include "sched_result.h"
 #include "data_extractor.h"
-//#include "mgl_chart.h"
+#include "mgl_chart.h"
 
 using namespace std;
 
@@ -16,6 +16,7 @@ void getFiles(string path, string dir);
 
 int main(int argc, char** argv)
 {
+	Chart chart;
 	SchedResultSet srs;
 	string path;
 	string buf;
@@ -54,6 +55,12 @@ int main(int argc, char** argv)
 		}
 */
 	}
+	
+	chart.SetGraphSize(1280, 720);
+	chart.SetGraphQual(3);
+	chart.AddData(srs);
+
+	chart.ExportLineChart("output/result", "", 0, 4, 0.1, PNG);
 
 	return 0;
 }

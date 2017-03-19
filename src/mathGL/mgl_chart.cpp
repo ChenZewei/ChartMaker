@@ -45,7 +45,7 @@ void Chart::AddColor(string newColor)
 {
 	color.push_back(newColor);
 }
-
+/*
 void Chart::AddData(string name, double* d, int size)
 {
 	Chart_Data temp;
@@ -54,7 +54,7 @@ void Chart::AddData(string name, double* d, int size)
 	data_set.push_back(temp);
 }
 
-void Chart::AddData(string name, Result_Set r_set)
+void Chart::AddData(string name, SchedResult sr)
 {
 
 	Chart_Data temp;
@@ -64,7 +64,17 @@ void Chart::AddData(string name, Result_Set r_set)
 	{
 		temp.data.a[i] = r_set[i].y;
 	}
+
+	foreach(sr.get_results(), result)
+	{
+		
+	}
 	data_set.push_back(temp);
+}
+*/
+void Chart::AddData(SchedResultSet srs)
+{
+	this->srs = srs;
 }
 
 void Chart::SetGraphSize(int width, int height)
@@ -77,19 +87,72 @@ void Chart::SetGraphQual(int quality)
 	graph.SetQuality(quality);
 }
 
-void Chart::ExportLineChart(string path, const char* title, double min, double max, int format)
+void Chart::ExportLineChart(string path, const char* title, double min, double max, double step, int format)
 {
 	graph.Clf('w');
-	if("" != title)
+	if(!(0 == strcmp(title, "")))
 		graph.Title(title,"",-2);	
 	graph.SetOrigin(0,0,0);
 	graph.SetRange('x', min, max);
 	graph.SetRange('y', 0, 1);	
-
+/*
 	for(int i = 0; i < data_set.size(); i++)
 	{
 		graph.Plot(data_set[i].data, get_line_style(i).c_str());
 		graph.AddLegend(data_set[i].name.c_str(), get_line_style(i).c_str());
+	}
+*/
+/*
+	foreach(srs.get_sched_result_set(), sr)
+	{
+		foreach(sr->get_results(), result)
+		{
+			cout<<sr->get_test_name()<<"\t"<<result->utilization<<"\t"<<result->exp_time<<"\t"<<result->success_time<<endl;
+		}
+	}
+*/
+	vector<Chart_Data> data_sets;
+
+	vector<SchedResult>& results_set= srs.get_sched_result_set();
+
+	foreach(results_set, results)
+	{
+		uint num = (max - min)/step + 1;
+		Chart_Data c_data;
+		c_data.name = results->get_test_name();
+		c_data.data = mglData(num);
+//cout<<"Name:"<<c_data.name<<endl;
+
+		{
+			double i = min; int j = 0;
+			for(; i - max < _EPS; i += step, j++)
+			{
+
+				Result r = results->get_result_by_utilization(i);
+//cout<<"utilization:"<<i<<":";
+				if(r.exp_time == 0)
+				{
+					c_data.data.a[j] = NAN;
+//cout<<"NAN"<<endl;
+				}
+				else
+				{
+					double ratio = r.success_time;
+					ratio /= r.exp_time;
+					c_data.data.a[j] = ratio;
+//cout<<ratio<<endl;
+				}
+
+			}
+		}
+
+		data_sets.push_back(c_data);
+	}
+
+	for(int i = 0; i < data_sets.size(); i++)
+	{
+		graph.Plot(data_sets[i].data, get_line_style(i).c_str());
+		graph.AddLegend(data_sets[i].name.c_str(), get_line_style(i).c_str());
 	}
 	
 	graph.Box();

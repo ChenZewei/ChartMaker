@@ -17,8 +17,8 @@ MOVE          = mv -f
 MKDIR         = mkdir -p
 TARGET	      = ChartMaker
 
-ChartMaker:ChartMaker.o sched_result.o data_extractor.o  
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o $(TARGET) ChartMaker.o sched_result.o data_extractor.o  $(LFLAGS) $(LIBS)
+ChartMaker:ChartMaker.o sched_result.o data_extractor.o mgl_chart.o  
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o $(TARGET) ChartMaker.o sched_result.o data_extractor.o mgl_chart.o  $(LFLAGS) $(LIBS)
 
 ChartMaker.o:ChartMaker.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -c ChartMaker.cpp $(LIBS)
@@ -28,3 +28,6 @@ sched_result.o:sched_result.cpp
 
 data_extractor.o:data_extractor.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -c data_extractor.cpp $(LIBS)
+
+mgl_chart.o:mathGL/mgl_chart.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -c mathGL/mgl_chart.cpp $(LIBS)
