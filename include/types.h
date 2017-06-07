@@ -33,10 +33,38 @@ typedef mpf_class floating_t;		//multiple precision float number
 
 typedef struct
 {
-	double	utilization;
-	uint 	exp_time;
-	uint	success_time;
+	double utilization;
+	uint exp_num;
+	uint success_num;
 }Result;
 
+typedef struct
+{
+	double min;
+	double max;
+}Range;
+
+typedef struct
+{
+	bool LP;
+	uint test_type;
+	uint test_method;
+	string sched_method;
+	string priority_assignment;
+	string locking_protocol;
+	string test_name;
+	string remark;
+	string rename;
+	string style;
+}Test_Attribute;
+
+typedef vector<int> Int_Set;
+typedef vector<double> Double_Set;
+typedef vector<Range> Range_Set;
+typedef vector<Result> Result_Set;
+typedef vector<Result_Set> Result_Sets;
+typedef vector<Test_Attribute> Test_Attribute_Set;
+typedef list<void*> TaskQueue;
+typedef list<void*> ResourceQueue;
 
 #endif

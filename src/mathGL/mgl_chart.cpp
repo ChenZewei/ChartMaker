@@ -1,4 +1,6 @@
 #include "mgl_chart.h"
+#include "iteration-helper.h"
+#include "random_gen.h"
 
 Chart::Chart()
 {
@@ -11,16 +13,7 @@ Chart::Chart()
 	color.push_back("{x44546A}");//dark grey
 	color.push_back("{x954F72}");//pupil
 
-	width.push_back("0");
-	width.push_back("1");
-	width.push_back("2");
-	width.push_back("3");
-	width.push_back("4");
-	width.push_back("5");
-	width.push_back("6");
-	width.push_back("7");
-	width.push_back("8");
-	width.push_back("9");
+	width = "2";
 
 	dot.push_back("*");
 	dot.push_back("o");
@@ -34,16 +27,38 @@ Chart::Chart()
 
 string Chart::get_line_style(int index)
 {
+
+	if(color.size() <= index)
+	{	
+		stringstream buf;
+		buf<<"{x";
+		buf<<hex;
+		uint r, g, b;
+		r = Random_Gen::uniform_integral_gen(1, 255);
+		g = Random_Gen::uniform_integral_gen(1, 255);
+		b = Random_Gen::uniform_integral_gen(1, 255);
+		buf<<r<<g<<b;
+		buf<<"}";
+		color.push_back(buf.str());
+	}
+
 	string style = "";
 	style += color[index];
-	style += width[2];
-	style += dot[index];
+	style += width;
+	style += dot[index%8];
 	return style;
 }
 
 void Chart::AddColor(string newColor)
 {
 	color.push_back(newColor);
+}
+
+void Chart::SetLineWidth(uint w)
+{
+	if(9 < w)
+		w = 9;
+	width = std::to_string(w);
 }
 /*
 void Chart::AddData(string name, double* d, int size)
@@ -54,7 +69,7 @@ void Chart::AddData(string name, double* d, int size)
 	data_set.push_back(temp);
 }
 
-void Chart::AddData(string name, SchedResult sr)
+void Chart::AddData(string name, Result_Set r_set)
 {
 
 	Chart_Data temp;
@@ -64,14 +79,10 @@ void Chart::AddData(string name, SchedResult sr)
 	{
 		temp.data.a[i] = r_set[i].y;
 	}
-
-	foreach(sr.get_results(), result)
-	{
-		
-	}
 	data_set.push_back(temp);
 }
 */
+
 void Chart::AddData(SchedResultSet srs)
 {
 	this->srs = srs;
@@ -95,22 +106,7 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 	graph.SetOrigin(0,0,0);
 	graph.SetRange('x', min, max);
 	graph.SetRange('y', 0, 1);	
-/*
-	for(int i = 0; i < data_set.size(); i++)
-	{
-		graph.Plot(data_set[i].data, get_line_style(i).c_str());
-		graph.AddLegend(data_set[i].name.c_str(), get_line_style(i).c_str());
-	}
-*/
-/*
-	foreach(srs.get_sched_result_set(), sr)
-	{
-		foreach(sr->get_results(), result)
-		{
-			cout<<sr->get_test_name()<<"\t"<<result->utilization<<"\t"<<result->exp_time<<"\t"<<result->success_time<<endl;
-		}
-	}
-*/
+
 	vector<Chart_Data> data_sets;
 
 	vector<SchedResult>& results_set= srs.get_sched_result_set();
@@ -120,27 +116,23 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 		uint num = (max - min)/step + 1;
 		Chart_Data c_data;
 		c_data.name = results->get_test_name();
+		c_data.style = results->get_line_style();
 		c_data.data = mglData(num);
-//cout<<"Name:"<<c_data.name<<endl;
-
 		{
 			double i = min; int j = 0;
 			for(; i - max < _EPS; i += step, j++)
 			{
 
 				Result r = results->get_result_by_utilization(i);
-//cout<<"utilization:"<<i<<":";
-				if(r.exp_time == 0)
+				if(r.exp_num == 0)
 				{
 					c_data.data.a[j] = NAN;
-//cout<<"NAN"<<endl;
 				}
 				else
 				{
-					double ratio = r.success_time;
-					ratio /= r.exp_time;
+					double ratio = r.success_num;
+					ratio /= r.exp_num;
 					c_data.data.a[j] = ratio;
-//cout<<ratio<<endl;
 				}
 
 			}
@@ -149,10 +141,20 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 		data_sets.push_back(c_data);
 	}
 
+	uint j = 0;
 	for(int i = 0; i < data_sets.size(); i++)
 	{
-		graph.Plot(data_sets[i].data, get_line_style(i).c_str());
-		graph.AddLegend(data_sets[i].name.c_str(), get_line_style(i).c_str());
+		if(!data_sets[i].style.empty())
+		{
+			graph.Plot(data_sets[i].data, data_sets[i].style.c_str());
+			graph.AddLegend(data_sets[i].name.c_str(), data_sets[i].style.c_str());
+		}
+		else
+		{
+			graph.Plot(data_sets[i].data, get_line_style(j).c_str());
+			graph.AddLegend(data_sets[i].name.c_str(), get_line_style(j).c_str());
+			j++;
+		}
 	}
 	
 	graph.Box();
@@ -190,3 +192,53 @@ void Chart::ExportJSON(string path)
 {
 	graph.WriteJSON(path.data());
 }
+
+/*
+void Chart::ExportLineChart(string path, const char* title, double min, double max, int format)
+{
+	graph.Clf('w');
+	if("" != title)
+		graph.Title(title,"",-2);	
+	graph.SetOrigin(0,0,0);
+	graph.SetRange('x', min, max);
+	graph.SetRange('y', 0, 1);	
+
+	for(int i = 0; i < data_set.size(); i++)
+	{
+		graph.Plot(data_set[i].data, get_line_style(i).c_str());
+		graph.AddLegend(data_set[i].name.c_str(), get_line_style(i).c_str());
+	}
+	
+	graph.Box();
+	//graph.Label('x',"x: TaskSet Utilization", 0);
+	//graph.Label('y',"y: Ratio", 0);
+	graph.Legend(0);
+	graph.Axis("xy");
+
+	string temp;
+
+	if(0x01 & format)
+	{
+		temp = path + ".png";
+		graph.WritePNG(temp.data());
+	}
+	if(0x02 & format)
+	{
+		temp = path + ".eps";
+		graph.WriteEPS(temp.data());
+	}
+	if(0x04 & format)
+	{
+		temp = path + ".svg";
+		graph.WriteSVG(temp.data());
+	}
+	if(0x08 & format)
+	{
+		temp = path + ".tga";
+		graph.WriteTGA(temp.data());
+	}
+
+}
+*/
+
+
