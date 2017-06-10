@@ -101,6 +101,8 @@
 		<data RENAME="NC"           STYLE="{x954F72}2=#d">RTA-PFP-RO-FEASIBLE</data>
 
 <!-->	
+		<data RENAME="R-PCP-rm-opa" STYLE="{xED7D31}2=^">RTA-PFP-RO-OPA</data>
+		<data RENAME="GS-MSRP" 	    STYLE="{x8080FF}2d">RTA-PFP-GS</data>
 	</schedulability_test>
 	<experiment_times>20</experiment_times>
 	<output>

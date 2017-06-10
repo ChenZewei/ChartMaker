@@ -16,12 +16,16 @@
 
 using namespace std;
 
-int readFileList(char *basePath);
+int readFileList(char *basePath, Test_Attribute_Set& test_attributes);
 
 int main()
 {
 	DIR *dir;
     char basePath[1000];
+	XML::LoadFile("config.xml");
+
+	Test_Attribute_Set test_attributes;
+	XML::get_method(&test_attributes);
 
     ///get the current absoulte path
     memset(basePath,'\0',sizeof(basePath));
@@ -31,11 +35,11 @@ int main()
     ///get the file list
     memset(basePath,'\0',sizeof(basePath));
     strcpy(basePath,"./input");
-    readFileList(basePath);
+    readFileList(basePath, test_attributes);
     return 0;
 }
 
-int readFileList(char *basePath)
+int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 {
     DIR *dir;
     struct dirent *ptr;
@@ -49,19 +53,100 @@ int readFileList(char *basePath)
 
     while ((ptr=readdir(dir)) != NULL)
     {
-        if(strcmp(ptr->d_name,".")==0 || strcmp(ptr->d_name,"..")==0)    ///current dir OR parrent dir
+		///current dir OR parrent dir
+        if(strcmp(ptr->d_name,".")==0 || strcmp(ptr->d_name,"..")==0)   
             continue;
         else if(ptr->d_type == 8)    ///file
-            printf("d_name:%s/%s\n",basePath,ptr->d_name);
-        else if(ptr->d_type == 10)    ///link file
-            printf("d_name:%s/%s\n",basePath,ptr->d_name);
+		{
+			string path = basePath;
+			string buf;
+			SchedResultSet srs;
+			if(0 == strcmp(ptr->d_name,"result-logs.csv"))
+			{
+				path += "/";
+				path += ptr->d_name;
+				//cout<<"input file:"<<path<<endl;
+				
+				ifstream input_file(path.data(), ifstream::in);
+
+				while(getline(input_file, buf))
+				{
+					//cout<<buf<<endl;
+					log_extract_by_line(srs, buf, test_attributes);
+				}
+
+				input_file.close();
+
+				string target_name;
+
+				if(0 == strcmp(test_attributes[0].rename.data(), ""))
+					target_name = test_attributes[0].test_name;
+				else
+					target_name = test_attributes[0].rename;
+
+//cout<<"Target:"<<target_name<<endl;
+
+/*
+				foreach(srs.get_sched_result_set(), set)
+				{
+					cout<<set->get_test_name()<<endl;
+
+				}
+*/
+
+				SchedResult& obj = srs.get_sched_result(test_attributes[0].rename);
+				bool exceed = true;
+
+				foreach(obj.get_results(), result)
+				{
+					fraction_t ratio = result->success_num;
+					ratio /= result->exp_num;
+//cout<<result->utilization<<endl;
+
+					foreach(srs.get_sched_result_set(), set)
+					{
+						if(0 == strcmp(obj.get_test_name().data(), set->get_test_name().data()))
+							continue;
+
+						//cout<<"Other:"<<set->get_test_name()<<endl;
+						
+						foreach(set->get_results(), result_t)
+						{
+							if(abs(result->utilization - result_t->utilization) < _EPS)
+							{
+								fraction_t ratio_t = result_t->success_num;
+								ratio_t /= result_t->exp_num;
+
+								if(ratio < ratio_t)
+								{
+
+//			cout<<"Utilization:"<<result->utilization<<endl;
+//			cout<<target_name<<":"<<ratio.get_d()<<endl;
+//			cout<<set->get_test_name()<<":"<<ratio_t.get_d()<<endl;
+			
+									exceed = false;
+									break;
+								}
+							}
+						}
+						if(!exceed)
+							break;
+					}
+					if(!exceed)
+						break;
+				}
+				if(exceed)
+					cout<<path<<endl;
+			}
+			
+		}
         else if(ptr->d_type == 4)    ///dir
         {
             memset(base,'\0',sizeof(base));
             strcpy(base,basePath);
             strcat(base,"/");
             strcat(base,ptr->d_name);
-            readFileList(base);
+            readFileList(base, test_attributes);
         }
     }
     closedir(dir);

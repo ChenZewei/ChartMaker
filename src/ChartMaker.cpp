@@ -50,18 +50,6 @@ int main(int argc, char** argv)
 		}
 
 		input_file.close();
-/*
-		cout<<"=================="<<endl;
-		cout<<"add file:"<<files[i]<<endl;
-
-		foreach(srs.get_sched_result_set(), sr)
-		{
-			foreach(sr->get_results(), result)
-			{
-				cout<<sr->get_test_name()<<"\t"<<result->utilization<<"\t"<<result->exp_time<<"\t"<<result->success_time<<endl;
-			}
-		}
-*/
 	}
 	
 	chart.SetGraphSize(1280, 720);

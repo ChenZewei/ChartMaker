@@ -21,10 +21,13 @@ TARGET	      = ChartMaker
 OBJ_FILE	  = sched_result.o data_extractor.o mgl_chart.o xml.o tinyxml2.o random_gen.o
 
 ChartMaker:ChartMaker.o $(OBJ_FILE)  
-	$(CXX) $(CXXFLAGS) $(INCPATH) -o $(TARGET) ChartMaker.o $(OBJ_FILE)  $(LFLAGS) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o $(TARGET) ChartMaker.o $(OBJ_FILE) $(LFLAGS) $(LIBS)
 
 Analyzer:Analyzer.o $(OBJ_FILE)  
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o Analyzer Analyzer.o $(OBJ_FILE)  $(LFLAGS) $(LIBS)
+
+ChartMaker.o:ChartMaker.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -c ChartMaker.cpp $(LIBS)
 
 Analyzer.o:Analyzer.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -c Analyzer.cpp $(LIBS)
