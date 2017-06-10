@@ -30,7 +30,7 @@ int main()
     ///get the current absoulte path
     memset(basePath,'\0',sizeof(basePath));
     getcwd(basePath, 999);
-    printf("the current dir is : %s\n",basePath);
+    //printf("the current dir is : %s\n",basePath);
 
     ///get the file list
     memset(basePath,'\0',sizeof(basePath));
