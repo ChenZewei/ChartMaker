@@ -23,8 +23,14 @@ OBJ_FILE	  = sched_result.o data_extractor.o mgl_chart.o xml.o tinyxml2.o random
 ChartMaker:ChartMaker.o $(OBJ_FILE)  
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o $(TARGET) ChartMaker.o $(OBJ_FILE)  $(LFLAGS) $(LIBS)
 
-ChartMaker.o:ChartMaker.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) -c ChartMaker.cpp $(LIBS)
+Analyzer:Analyzer.o $(OBJ_FILE)  
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o Analyzer Analyzer.o $(OBJ_FILE)  $(LFLAGS) $(LIBS)
+
+Analyzer.o:Analyzer.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -c Analyzer.cpp $(LIBS)
+
+sched_result.o:sched_result.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -c sched_result.cpp $(LIBS)
 
 sched_result.o:sched_result.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -c sched_result.cpp $(LIBS)
