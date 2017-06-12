@@ -56,6 +56,7 @@ typedef struct
 	string remark;
 	string rename;
 	string style;
+	uint cluster;
 }Test_Attribute;
 
 typedef vector<int> Int_Set;

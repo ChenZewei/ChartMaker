@@ -32,6 +32,7 @@ void XML::get_method(Test_Attribute_Set *t_set)
 		string remark;
 		string rename;
 		string style;
+		uint cluster;
 		if(NULL == subtitle->Attribute("REMARK"))
 			remark = "";
 		else
@@ -44,6 +45,10 @@ void XML::get_method(Test_Attribute_Set *t_set)
 			style = "";
 		else
 			style = subtitle->Attribute("STYLE");
+		if(NULL == subtitle->Attribute("CLUSTER"))
+			cluster = 0;
+		else
+			cluster = atoi(subtitle->Attribute("CLUSTER"));
 		int transform = 0;
 		if(0 == strcmp(content,"P-EDF"))
 		{
@@ -107,6 +112,7 @@ void XML::get_method(Test_Attribute_Set *t_set)
 		ta.remark = remark;
 		ta.rename = rename;
 		ta.style = style;
+		ta.cluster = cluster;
 		t_set->push_back(ta);
 //		i_set->push_back(transform);
 		subtitle = subtitle->NextSiblingElement();

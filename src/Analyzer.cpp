@@ -16,6 +16,12 @@
 
 using namespace std;
 
+static uint exp_t = 0;
+static uint exp_c = 0;
+
+static double step;
+static Range u_range;
+
 int readFileList(char *basePath, Test_Attribute_Set& test_attributes);
 
 int main()
@@ -25,7 +31,14 @@ int main()
 	XML::LoadFile("config.xml");
 
 	Test_Attribute_Set test_attributes;
+	Double_Set steps;
+	Range_Set u_ranges;
 	XML::get_method(&test_attributes);
+	XML::get_utilization_range(&u_ranges);
+	XML::get_step(&steps);
+
+	step = steps[0];
+	u_range = u_ranges[0];
 
     ///get the current absoulte path
     memset(basePath,'\0',sizeof(basePath));
@@ -36,6 +49,12 @@ int main()
     memset(basePath,'\0',sizeof(basePath));
     strcpy(basePath,"./input");
     readFileList(basePath, test_attributes);
+
+	fraction_t ratio = exp_c;
+	ratio /= exp_t;
+	cout<<"Total EXP:"<<exp_t<<endl;
+	cout<<"Not worse EXP:"<<exp_c<<endl;
+	cout<<"Ratio:"<<ratio.get_d()<<endl;
     return 0;
 }
 
@@ -63,80 +82,111 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 			SchedResultSet srs;
 			if(0 == strcmp(ptr->d_name,"result-logs.csv"))
 			{
+				exp_t++;
 				path += "/";
 				path += ptr->d_name;
-				//cout<<"input file:"<<path<<endl;
+//				cout<<"input file:"<<path<<endl;
 				
 				ifstream input_file(path.data(), ifstream::in);
 
 				while(getline(input_file, buf))
 				{
-					//cout<<buf<<endl;
 					log_extract_by_line(srs, buf, test_attributes);
 				}
 
 				input_file.close();
 
-				string target_name;
+//cout<<""<<endl;
 
-				if(0 == strcmp(test_attributes[0].rename.data(), ""))
-					target_name = test_attributes[0].test_name;
-				else
-					target_name = test_attributes[0].rename;
 
-//cout<<"Target:"<<target_name<<endl;
+				vector<string> targets, others;
+
+				foreach(test_attributes, ta)
+				{
+					if(0 == ta->cluster)
+					{
+						if(0 == strcmp(ta->rename.data(), ""))
+							targets.push_back(ta->test_name);
+						else
+							targets.push_back(ta->rename);
+					}
+					else
+					{
+						if(0 == strcmp(ta->rename.data(), ""))
+							others.push_back(ta->test_name);
+						else
+							others.push_back(ta->rename);
+					}
+				}
 
 /*
-				foreach(srs.get_sched_result_set(), set)
+				foreach(targets, test)
 				{
-					cout<<set->get_test_name()<<endl;
+					cout<<"Target:"<<*test<<endl;
+				}
 
+				foreach(others, test)
+				{
+					cout<<"Others:"<<*test<<endl;
 				}
 */
 
 				SchedResult& obj = srs.get_sched_result(test_attributes[0].rename);
-				bool exceed = true;
+				bool not_worse;
 
-				foreach(obj.get_results(), result)
+				double utilization = u_range.min;
+
+				do
 				{
-					fraction_t ratio = result->success_num;
-					ratio /= result->exp_num;
-//cout<<result->utilization<<endl;
-
-					foreach(srs.get_sched_result_set(), set)
+//cout<<"Utilization:"<<utilization<<endl;
+					not_worse = false;
+					vector<fraction_t> target_ratios;
+					foreach(targets, test)
 					{
-						if(0 == strcmp(obj.get_test_name().data(), set->get_test_name().data()))
+						SchedResult& obj = srs.get_sched_result(*test);
+						Result temp = obj.get_result_by_utilization(utilization);
+						if(0 == temp.exp_num)
 							continue;
-
-						//cout<<"Other:"<<set->get_test_name()<<endl;
 						
-						foreach(set->get_results(), result_t)
+						fraction_t ratio = temp.success_num;
+						ratio /= temp.exp_num;
+
+						target_ratios.push_back(ratio);
+					}
+
+					foreach(others, test)
+					{
+						SchedResult& obj = srs.get_sched_result(*test);
+						Result temp = obj.get_result_by_utilization(utilization);
+						
+						if(0 == temp.exp_num)
+							continue;
+						
+						fraction_t ratio = temp.success_num;
+						ratio /= temp.exp_num;
+
+						foreach(target_ratios, target_ratio)
 						{
-							if(abs(result->utilization - result_t->utilization) < _EPS)
-							{
-								fraction_t ratio_t = result_t->success_num;
-								ratio_t /= result_t->exp_num;
-
-								if(ratio < ratio_t)
-								{
-
-//			cout<<"Utilization:"<<result->utilization<<endl;
-//			cout<<target_name<<":"<<ratio.get_d()<<endl;
-//			cout<<set->get_test_name()<<":"<<ratio_t.get_d()<<endl;
-			
-									exceed = false;
-									break;
-								}
+							if(ratio <= *target_ratio)
+							{	
+								not_worse = true;
+								break;
 							}
 						}
-						if(!exceed)
+						if(!not_worse)
 							break;
 					}
-					if(!exceed)
+					if(!not_worse)
 						break;
+
+				utilization += step;
 				}
-				if(exceed)
+				while(utilization < u_range.max || fabs(u_range.max - utilization) < _EPS);
+				if(not_worse)
+				{
+					exp_c++;
 					cout<<path<<endl;
+				}
 			}
 			
 		}
@@ -149,6 +199,8 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
             readFileList(base, test_attributes);
         }
     }
+
+	
     closedir(dir);
     return 1;
 }
