@@ -11,6 +11,7 @@
 #include "sched_result.h"
 #include "data_extractor.h"
 #include "mgl_chart.h"
+#include "xml.h"
 
 using namespace std;
 
@@ -18,6 +19,11 @@ void getFiles(string path, string dir);
 
 int main(int argc, char** argv)
 {
+	XML::LoadFile("config.xml");
+
+	Test_Attribute_Set test_attributes;
+	XML::get_method(&test_attributes);
+
 	Chart chart;
 	SchedResultSet srs;
 	string path;
@@ -40,29 +46,17 @@ int main(int argc, char** argv)
 		while(getline(input_file, buf))
 		{
 			//cout<<buf<<endl;
-			log_extract_by_line(srs,buf);
+			log_extract_by_line(srs, buf, test_attributes);
 		}
 
 		input_file.close();
-/*
-		cout<<"=================="<<endl;
-		cout<<"add file:"<<files[i]<<endl;
-
-		foreach(srs.get_sched_result_set(), sr)
-		{
-			foreach(sr->get_results(), result)
-			{
-				cout<<sr->get_test_name()<<"\t"<<result->utilization<<"\t"<<result->exp_time<<"\t"<<result->success_time<<endl;
-			}
-		}
-*/
 	}
 	
 	chart.SetGraphSize(1280, 720);
 	chart.SetGraphQual(3);
 	chart.AddData(srs);
 
-	chart.ExportLineChart("output/result", "", 0, 4, 0.1, PNG);
+	chart.ExportLineChart("output/result", "", 0, 4, 0.2, PNG);
 
 	return 0;
 }

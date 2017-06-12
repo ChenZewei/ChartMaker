@@ -7,6 +7,6 @@ class SchedResult;
 class SchedResultSet;
 
 void read_line(string path, vector<string>& files);
-void log_extract_by_line(SchedResultSet& srs, string bufline);
+void log_extract_by_line(SchedResultSet& srs, string bufline, Test_Attribute_Set set);
 
 #endif

@@ -1,4 +1,5 @@
 #include "sched_result.h"
+#include "iteration-helper.h"
 
 template <typename TaskModel>
 int increase_order(TaskModel t1, TaskModel t2)
@@ -6,15 +7,22 @@ int increase_order(TaskModel t1, TaskModel t2)
 	return t1.utilization < t2.utilization;
 }
 
-SchedResult::SchedResult(string name)
+SchedResult::SchedResult(string name, string style)
 {
 	test_name = name;
+	line_style = style;
 }
 
 
 string SchedResult::get_test_name()
 {
 	return test_name;
+}
+
+
+string SchedResult::get_line_style()
+{
+	return line_style;
 }
 
 void SchedResult::insert_result(double utilization, uint e_time, uint s_time)
@@ -26,9 +34,8 @@ void SchedResult::insert_result(double utilization, uint e_time, uint s_time)
 		if(abs(result->utilization - utilization) <= _EPS)
 		{
 			exist = true;
-
-			result->exp_time += e_time;
-			result->success_time += s_time;
+			result->exp_num += e_time;
+			result->success_num += s_time;
 			break;
 		}
 	}
@@ -37,8 +44,8 @@ void SchedResult::insert_result(double utilization, uint e_time, uint s_time)
 	{
 		Result temp;
 		temp.utilization = utilization;
-		temp.exp_time = e_time;
-		temp.success_time = s_time;
+		temp.exp_num = e_time;
+		temp.success_num = s_time;
 
 		results.push_back(temp);
 
@@ -55,8 +62,8 @@ Result SchedResult::get_result_by_utilization(double utilization)
 {
 	Result empty;
 	empty.utilization = 0;
-	empty.exp_time = 0;
-	empty.success_time = 0;
+	empty.exp_num = 0;
+	empty.success_num = 0;
 
 	foreach(results, result)
 	{
@@ -76,7 +83,7 @@ uint SchedResultSet::size() {return sched_result_set.size();}
 
 vector<SchedResult>& SchedResultSet::get_sched_result_set() {return sched_result_set;}
 
-SchedResult& SchedResultSet::get_sched_result(string test_name)
+SchedResult& SchedResultSet::get_sched_result(string test_name, string line_style)
 {
 	foreach(sched_result_set, sched_result)
 	{
@@ -86,7 +93,7 @@ SchedResult& SchedResultSet::get_sched_result(string test_name)
 		}
 	}
 
-	SchedResult new_element(test_name);
+	SchedResult new_element(test_name, line_style);
 
 	sched_result_set.push_back(new_element);
 
