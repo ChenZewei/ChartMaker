@@ -91,6 +91,7 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 
 				while(getline(input_file, buf))
 				{
+//					cout<<buf<<endl;
 					log_extract_by_line(srs, buf, test_attributes);
 				}
 
@@ -133,13 +134,15 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 
 				SchedResult& obj = srs.get_sched_result(test_attributes[0].rename);
 				bool not_worse;
+				bool better = false;
 
 				double utilization = u_range.min;
 
 				do
 				{
-//cout<<"Utilization:"<<utilization<<endl;
-					not_worse = false;
+//cout<<"-------------------Utilization:"<<utilization<<endl;
+//					not_worse = false;
+//					better = false;
 					vector<fraction_t> target_ratios;
 					foreach(targets, test)
 					{
@@ -150,12 +153,20 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 						
 						fraction_t ratio = temp.success_num;
 						ratio /= temp.exp_num;
-
+//cout<<"TARGET:"<<obj.get_test_name()<<" ratio:"<<ratio.get_d()<<endl;
 						target_ratios.push_back(ratio);
+					}
+
+					if(0 == target_ratios.size())
+					{
+						utilization += step;
+						continue;
 					}
 
 					foreach(others, test)
 					{
+						not_worse = false;
+						//better = false;
 						SchedResult& obj = srs.get_sched_result(*test);
 						Result temp = obj.get_result_by_utilization(utilization);
 						
@@ -165,10 +176,14 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 						fraction_t ratio = temp.success_num;
 						ratio /= temp.exp_num;
 
+//cout<<obj.get_test_name()<<" ratio:"<<ratio.get_d()<<endl;
 						foreach(target_ratios, target_ratio)
 						{
+							if(ratio < *target_ratio)
+								better = true;
 							if(ratio <= *target_ratio)
 							{	
+//cout<<"Not worse!!!!!!"<<endl;
 								not_worse = true;
 								break;
 							}
@@ -182,7 +197,7 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 				utilization += step;
 				}
 				while(utilization < u_range.max || fabs(u_range.max - utilization) < _EPS);
-				if(not_worse)
+				if(not_worse && better)
 				{
 					exp_c++;
 					cout<<path<<endl;
