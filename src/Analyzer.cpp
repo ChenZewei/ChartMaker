@@ -18,6 +18,7 @@ using namespace std;
 
 static uint exp_t = 0;
 static uint exp_c = 0;
+static uint exp_e = 0;
 
 static double step;
 static Range u_range;
@@ -54,6 +55,7 @@ int main()
 	ratio /= exp_t;
 	cout<<"Total EXP:"<<exp_t<<endl;
 	cout<<"Not worse EXP:"<<exp_c<<endl;
+	cout<<"Totally equal EXP:"<<exp_e<<endl;
 	cout<<"Ratio:"<<ratio.get_d()<<endl;
     return 0;
 }
@@ -135,6 +137,7 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 				SchedResult& obj = srs.get_sched_result(test_attributes[0].rename);
 				bool not_worse;
 				bool better = false;
+				bool equal = true;
 
 				double utilization = u_range.min;
 
@@ -187,6 +190,8 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 								not_worse = true;
 								break;
 							}
+							if(ratio != *target_ratio)
+								equal = false;
 						}
 						if(!not_worse)
 							break;
@@ -202,6 +207,8 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 					exp_c++;
 					cout<<path<<endl;
 				}
+				if(equal)
+					exp_e++;
 			}
 			
 		}

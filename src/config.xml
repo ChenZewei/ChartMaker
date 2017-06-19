@@ -100,26 +100,40 @@
 		<data RENAME="R-NP-rm" 	    STYLE="{x44546A}2:s">RTA-PFP-RO-NP</data>
 		<data RENAME="NC"           STYLE="{x954F72}2=#d">RTA-PFP-RO-FEASIBLE</data>
 
-		
-		<data RENAME="LP-FMLP"	    STYLE="{x5B9BD5}2o"   CLUSTER="1">LP-RTA-GFP-FMLP</data>
-		<data RENAME="LP-DPCP"      STYLE="{xEB5B5B}2+"   CLUSTER="1">LP-RTA-PFP-DPCP</data>
-		<data RENAME="GS-MSRP" 	    STYLE="{x8080FF}2d"   CLUSTER="1">RTA-PFP-GS</data>
-		<data RENAME="LP-EE-vpr"    STYLE="{x5B9BD5}2o"   CLUSTER="1">NC-LP-EE-VPR</data>
-		<data RENAME="R-PCP-rm"     STYLE="{x0080FF}2v"   CLUSTER="0">RTA-PFP-RO-ML</data>
-		<data RENAME="R-PCP-rm-opa" STYLE="{xED7D31}2=^"  CLUSTER="0">RTA-PFP-RO-OPA</data>
-		<data RENAME="R-PCP-sm"     STYLE="{x0080FF}2j#^" CLUSTER="0">RTA-PFP-RO-SM</data>
-		<data RENAME="R-PCP-sm-opa" STYLE="{xED7D31}2:#v" CLUSTER="0">RTA-PFP-RO-SM-OPA</data>
-		<data RENAME="R-NP-rm" 	    STYLE="{x44546A}2:s"  CLUSTER="1">RTA-PFP-RO-NP</data>
-<!-->	
+#EXP2
 		<data RENAME="LP-GFP-FMLP"	    STYLE="{x5B9BD5}2o"   CLUSTER="1">LP-RTA-GFP-FMLP</data>
 		<data RENAME="LP-PFP-DPCP"      STYLE="{xEB5B5B}2+"   CLUSTER="1">LP-RTA-PFP-DPCP</data>
+		<data RENAME="LP-PFP-MPCP" 	    STYLE="{x00A000}2s"	  CLUSTER="1">LP-RTA-PFP-MPCP</data>
 		<data RENAME="GS-MSRP" 	    STYLE="{x8080FF}2d"   CLUSTER="1">RTA-PFP-GS</data>
-		<data RENAME="LP-EE-vpr"    STYLE="{x5B9BD5}2o"   CLUSTER="1">NC-LP-EE-VPR</data>
 		<data RENAME="R-PCP"     STYLE="{x0080FF}2v"   CLUSTER="0">RTA-PFP-RO-ML</data>
 		<data RENAME="R-PCP-opa" STYLE="{xED7D31}2=^"  CLUSTER="0">RTA-PFP-RO-OPA</data>
 		<data RENAME="R-PCP-sm"     STYLE="{x0080FF}2j#^" CLUSTER="0">RTA-PFP-RO-SM</data>
 		<data RENAME="R-PCP-sm-opa" STYLE="{xED7D31}2:#v" CLUSTER="0">RTA-PFP-RO-SM-OPA</data>
 		<data RENAME="R-NP" 	    STYLE="{x44546A}2:s"  CLUSTER="1">RTA-PFP-RO-NP</data>
+
+#EXP3		
+		<data RENAME="LP-GFP-FMLP"	    STYLE="{x5B9BD5}2o"   CLUSTER="1">LP-RTA-GFP-FMLP</data>
+		<data RENAME="LP-PFP-DPCP"      STYLE="{xEB5B5B}2+"   CLUSTER="1">LP-RTA-PFP-DPCP</data>
+		<data RENAME="GS-MSRP" 	    STYLE="{x8080FF}2d"   CLUSTER="1">RTA-PFP-GS</data>
+		<data RENAME="LP-EE-vpr"    STYLE="{x000000}2o"   CLUSTER="1">NC-LP-EE-VPR</data>
+		<data RENAME="R-PCP"     STYLE="{x0080FF}2v"   CLUSTER="0">RTA-PFP-RO-ML</data>
+		<data RENAME="R-PCP-opa" STYLE="{xED7D31}2=^"  CLUSTER="0">RTA-PFP-RO-OPA</data>
+		<data RENAME="R-PCP-sm"     STYLE="{x0080FF}2j#^" CLUSTER="0">RTA-PFP-RO-SM</data>
+		<data RENAME="R-PCP-sm-opa" STYLE="{xED7D31}2:#v" CLUSTER="0">RTA-PFP-RO-SM-OPA</data>
+		<data RENAME="R-NP" 	    STYLE="{x44546A}2:s"  CLUSTER="1">RTA-PFP-RO-NP</data>
+
+		<data RENAME="LP-GFP-FMLP"	    STYLE="{x5B9BD5}2o"   CLUSTER="1">LP-RTA-GFP-FMLP</data>
+		<data RENAME="LP-PFP-DPCP"      STYLE="{xEB5B5B}2+"   CLUSTER="1">LP-RTA-PFP-DPCP</data>
+		<data RENAME="LP-PFP-MPCP" 	    STYLE="{x00A000}2s"	  CLUSTER="1">LP-RTA-PFP-MPCP</data>
+		<data RENAME="GS-MSRP" 	    STYLE="{x8080FF}2d"   CLUSTER="1">RTA-PFP-GS</data>
+		<data RENAME="R-PCP"     STYLE="{x0080FF}2v"   CLUSTER="0">RTA-PFP-RO-ML</data>
+		<data RENAME="R-PCP-opa" STYLE="{xED7D31}2=^"  CLUSTER="0">RTA-PFP-RO-OPA</data>
+		<data RENAME="R-PCP-sm"     STYLE="{x0080FF}2j#^" CLUSTER="0">RTA-PFP-RO-SM</data>
+		<data RENAME="R-PCP-sm-opa" STYLE="{xED7D31}2:#v" CLUSTER="0">RTA-PFP-RO-SM-OPA</data>
+		<data RENAME="R-NP" 	    STYLE="{x44546A}2:s"  CLUSTER="1">RTA-PFP-RO-NP</data>
+<!-->	
+		<data RENAME="R-PCP"     STYLE="{x0080FF}2v"   CLUSTER="1">RTA-PFP-RO-ML</data>
+		<data RENAME="R-NP" 	    STYLE="{x44546A}2:s"  CLUSTER="0">RTA-PFP-RO-NP</data>
 	</schedulability_test>
 	<experiment_times>20</experiment_times>
 	<output>

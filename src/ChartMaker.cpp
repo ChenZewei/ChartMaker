@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 	chart.SetGraphQual(3);
 	chart.AddData(srs);
 
-	chart.ExportLineChart("output/result", "", u_range.min, u_range.max, step, PNG);
+	chart.ExportLineChart("output/result", "", u_range.min, u_range.max, step, PNG|EPS);
 
 	string file_name = "output/result-logs.csv";
 	ofstream output_file(file_name, ofstream::app);
