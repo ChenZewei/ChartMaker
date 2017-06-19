@@ -15,6 +15,12 @@
 
 using namespace std;
 
+static uint exp_t = 0;
+static uint exp_c = 0;
+
+static double step;
+static Range u_range;
+
 void getFiles(string path, string dir);
 
 int main(int argc, char** argv)
@@ -22,7 +28,14 @@ int main(int argc, char** argv)
 	XML::LoadFile("config.xml");
 
 	Test_Attribute_Set test_attributes;
+	Double_Set steps;
+	Range_Set u_ranges;
 	XML::get_method(&test_attributes);
+	XML::get_utilization_range(&u_ranges);
+	XML::get_step(&steps);
+
+	step = steps[0];
+	u_range = u_ranges[0];
 
 	Chart chart;
 	SchedResultSet srs;
@@ -45,7 +58,7 @@ int main(int argc, char** argv)
 	
 		while(getline(input_file, buf))
 		{
-			//cout<<buf<<endl;
+//			cout<<buf<<endl;
 			log_extract_by_line(srs, buf, test_attributes);
 		}
 
@@ -56,7 +69,25 @@ int main(int argc, char** argv)
 	chart.SetGraphQual(3);
 	chart.AddData(srs);
 
-	chart.ExportLineChart("output/result", "", 0, 4, 0.2, PNG);
+	chart.ExportLineChart("output/result", "", u_range.min, u_range.max, step, PNG);
+
+	string file_name = "output/result-logs.csv";
+	ofstream output_file(file_name, ofstream::app);
+	double utilization = u_range.min;
+	do
+	{
+		foreach(srs.get_sched_result_set(), sr)
+		{
+			stringstream buf;
+			Result result = sr->get_result_by_utilization(utilization);
+			buf<<sr->get_test_name()<<"\t"<<utilization<<"\t"<<result.exp_num<<"\t"<<result.success_num;
+			output_file<<buf.str()<<"\n";
+			output_file.flush();
+		}
+		utilization += step;
+	}
+	while(utilization < u_range.max || fabs(u_range.max - utilization) < _EPS);
+	output_file.close();
 
 	return 0;
 }
