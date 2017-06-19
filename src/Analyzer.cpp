@@ -22,7 +22,7 @@ static uint exp_c = 0;
 static double step;
 static Range u_range;
 
-int readFileList(char *basePath, Test_Attribute_Set& test_attributes);
+int readFileList(string basePath, Test_Attribute_Set& test_attributes);
 
 int main()
 {
@@ -58,13 +58,13 @@ int main()
     return 0;
 }
 
-int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
+int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 {
     DIR *dir;
     struct dirent *ptr;
-    char base[1000];
+    string base;
 
-    if ((dir=opendir(basePath)) == NULL)
+    if ((dir=opendir(basePath.data())) == NULL)
     {
         perror("Open dir error...");
         exit(1);
@@ -207,10 +207,15 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 		}
         else if(ptr->d_type == 4)    ///dir
         {
+/*
             memset(base,'\0',sizeof(base));
             strcpy(base,basePath);
             strcat(base,"/");
             strcat(base,ptr->d_name);
+*/
+			base = basePath;
+			base += "/";
+			base += ptr->d_name;
             readFileList(base, test_attributes);
         }
     }
