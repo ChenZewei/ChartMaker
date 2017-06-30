@@ -26,11 +26,17 @@ ChartMaker:ChartMaker.o $(OBJ_FILE)
 Analyzer:Analyzer.o $(OBJ_FILE)  
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o Analyzer Analyzer.o $(OBJ_FILE)  $(LFLAGS) $(LIBS)
 
+test:test.o $(OBJ_FILE)  
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o test test.o $(OBJ_FILE)  $(LFLAGS) $(LIBS)
+
 ChartMaker.o:ChartMaker.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -c ChartMaker.cpp $(LIBS)
 
 Analyzer.o:Analyzer.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -c Analyzer.cpp $(LIBS)
+
+test.o:test.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -c test.cpp $(LIBS)
 
 sched_result.o:sched_result.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -c sched_result.cpp $(LIBS)

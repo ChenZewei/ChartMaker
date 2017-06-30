@@ -131,9 +131,11 @@
 		<data RENAME="R-PCP-sm"     STYLE="{x0080FF}2j#^" CLUSTER="0">RTA-PFP-RO-SM</data>
 		<data RENAME="R-PCP-sm-opa" STYLE="{xED7D31}2:#v" CLUSTER="0">RTA-PFP-RO-SM-OPA</data>
 		<data RENAME="R-NP" 	    STYLE="{x44546A}2:s"  CLUSTER="1">RTA-PFP-RO-NP</data>
-<!-->	
-		<data RENAME="R-PCP"     STYLE="{x0080FF}2v"   CLUSTER="1">RTA-PFP-RO-ML</data>
-		<data RENAME="R-NP" 	    STYLE="{x44546A}2:s"  CLUSTER="0">RTA-PFP-RO-NP</data>
+<!-->
+        <data RENAME="LP-FMLP" REMARK="">LP-RTA-GFP-FMLP</data>
+        <data RENAME="LP-DPCP" REMARK="">LP-RTA-PFP-DPCP</data>
+        <data RENAME="LP-MPCP" REMARK="">LP-RTA-PFP-MPCP</data>
+        <data RENAME="GS" REMARK="">RTA-PFP-GS</data>
 	</schedulability_test>
 	<experiment_times>20</experiment_times>
 	<output>
@@ -143,36 +145,36 @@
 		<data FORMAT="TGA" BLACK_ONLY="true" >LineChart</data>
 		<data>JSON</data>
 	</output>
-	<lambda>
-		<data>10</data>
-	</lambda>
-	<step>
-		<data>0.2</data>
-	</step>
-	<init_utilization_range>
-		<data>
-			<min>0</min>
-			<max>8</max>
-		</data>
-	</init_utilization_range>
-	<processor_num>
-		<data>4</data>	
-	</processor_num>
-	<period_range>
-		<data>
-			<min>1000</min>
-			<max>100000</max>
-		</data>
-	</period_range>
+    <lambda>
+        <data>10</data>
+    </lambda>
+    <step>
+        <data>5</data>
+    </step>
+    <init_utilization_range>
+        <data>
+            <min>0</min>
+            <max>100</max>
+        </data>
+    </init_utilization_range>
+    <processor_num>
+        <data>4</data>
+    </processor_num>
+    <period_range>
+        <data>
+            <min>10000</min>
+            <max>1000000</max>
+        </data>
+    </period_range>
 	<deadline_propotion>
 		<data>
 			<min>1</min>
 			<max>1</max>
 		</data>
 	</deadline_propotion>
-	<resource_num>
-		<data>1</data>
-	</resource_num>
+    <resource_num>
+        <data>4</data>
+    </resource_num>
 	<mcsn>//max_critical_section_number
 		<data>100</data>
 	</mcsn>

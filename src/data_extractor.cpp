@@ -94,3 +94,35 @@ bool log_extract_by_line(SchedResultSet& srs, string bufline, Test_Attribute_Set
 
 	return true;
 }
+
+void extract_element(vector<floating_t>& elements, string bufline, uint start, uint num, const char seperator)
+{
+	char *charbuf;
+	string cut = " \t\r\n";
+	cut += seperator;
+
+	uint count = 0;
+
+	try
+	{
+		if(NULL != (charbuf = strtok(bufline.data(), cut.data())))
+			do
+			{
+				if(count >= start && count < start + num)
+				{
+					cout<<"element:"<<charbuf<<endl;
+					floating_t element(charbuf, 100);
+					elements.push_back(element);
+				}
+				count++;
+			}
+			while(NULL != (charbuf = strtok(NULL, cut.data())));
+	}
+	catch(exception &e)
+	{
+		cout<<"extract exception."<<endl;
+	}
+}
+
+
+
