@@ -18,11 +18,12 @@ using namespace std;
 
 static uint exp_t = 0;
 static uint exp_c = 0;
+static uint exp_e = 0;
 
 static double step;
 static Range u_range;
 
-int readFileList(char *basePath, Test_Attribute_Set& test_attributes);
+int readFileList(string basePath, Test_Attribute_Set& test_attributes);
 
 int main()
 {
@@ -54,17 +55,18 @@ int main()
 	ratio /= exp_t;
 	cout<<"Total EXP:"<<exp_t<<endl;
 	cout<<"Not worse EXP:"<<exp_c<<endl;
+	cout<<"Totally equal EXP:"<<exp_e<<endl;
 	cout<<"Ratio:"<<ratio.get_d()<<endl;
     return 0;
 }
 
-int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
+int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 {
     DIR *dir;
     struct dirent *ptr;
-    char base[1000];
+    string base;
 
-    if ((dir=opendir(basePath)) == NULL)
+    if ((dir=opendir(basePath.data())) == NULL)
     {
         perror("Open dir error...");
         exit(1);
@@ -91,6 +93,7 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 
 				while(getline(input_file, buf))
 				{
+//					cout<<buf<<endl;
 					log_extract_by_line(srs, buf, test_attributes);
 				}
 
@@ -133,13 +136,16 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 
 				SchedResult& obj = srs.get_sched_result(test_attributes[0].rename);
 				bool not_worse;
+				bool better = false;
+				bool equal = true;
 
 				double utilization = u_range.min;
 
 				do
 				{
-//cout<<"Utilization:"<<utilization<<endl;
-					not_worse = false;
+//cout<<"-------------------Utilization:"<<utilization<<endl;
+//					not_worse = false;
+//					better = false;
 					vector<fraction_t> target_ratios;
 					foreach(targets, test)
 					{
@@ -150,12 +156,20 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 						
 						fraction_t ratio = temp.success_num;
 						ratio /= temp.exp_num;
-
+//cout<<"TARGET:"<<obj.get_test_name()<<" ratio:"<<ratio.get_d()<<endl;
 						target_ratios.push_back(ratio);
+					}
+
+					if(0 == target_ratios.size())
+					{
+						utilization += step;
+						continue;
 					}
 
 					foreach(others, test)
 					{
+						not_worse = false;
+						//better = false;
 						SchedResult& obj = srs.get_sched_result(*test);
 						Result temp = obj.get_result_by_utilization(utilization);
 						
@@ -165,13 +179,19 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 						fraction_t ratio = temp.success_num;
 						ratio /= temp.exp_num;
 
+//cout<<obj.get_test_name()<<" ratio:"<<ratio.get_d()<<endl;
 						foreach(target_ratios, target_ratio)
 						{
+							if(ratio < *target_ratio)
+								better = true;
 							if(ratio <= *target_ratio)
 							{	
+//cout<<"Not worse!!!!!!"<<endl;
 								not_worse = true;
 								break;
 							}
+							if(ratio != *target_ratio)
+								equal = false;
 						}
 						if(!not_worse)
 							break;
@@ -182,20 +202,27 @@ int readFileList(char *basePath, Test_Attribute_Set& test_attributes)
 				utilization += step;
 				}
 				while(utilization < u_range.max || fabs(u_range.max - utilization) < _EPS);
-				if(not_worse)
+				if(not_worse && better)
 				{
 					exp_c++;
 					cout<<path<<endl;
 				}
+				if(equal)
+					exp_e++;
 			}
 			
 		}
         else if(ptr->d_type == 4)    ///dir
         {
+/*
             memset(base,'\0',sizeof(base));
             strcpy(base,basePath);
             strcat(base,"/");
             strcat(base,ptr->d_name);
+*/
+			base = basePath;
+			base += "/";
+			base += ptr->d_name;
             readFileList(base, test_attributes);
         }
     }
