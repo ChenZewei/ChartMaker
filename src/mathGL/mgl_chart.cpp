@@ -23,6 +23,7 @@ Chart::Chart()
 	dot.push_back("^");
 	dot.push_back("v");
 	dot.push_back("x");
+
 }
 
 string Chart::get_line_style(int index)
@@ -103,7 +104,7 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 	graph.Clf('w');
 	if(!(0 == strcmp(title, "")))
 		graph.Title(title,"",-2);	
-	graph.SetOrigin(0,0,0);
+	graph.SetOrigin(0,0);
 	graph.SetRange('x', min, max);
 	graph.SetRange('y', 0, 1);	
 
@@ -185,6 +186,9 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 		temp = path + ".tga";
 		graph.WriteTGA(temp.data());
 	}
+
+	temp = path + ".tex";
+		graph.WriteTEX(temp.data());
 
 }
 
