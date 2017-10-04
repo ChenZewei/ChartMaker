@@ -158,8 +158,8 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 	}
 	
 	graph.Box();
-	//graph.Label('x',"x: TaskSet Utilization", 0);
-	//graph.Label('y',"y: Ratio", 0);
+	//graph.Label('x',"taskset utilization", 0);
+	//graph.Label('y',"ratio", 0);
 	graph.Legend(0);
 	graph.Axis("xy");
 
