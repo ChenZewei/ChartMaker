@@ -186,6 +186,8 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 //cout<<obj.get_test_name()<<" ratio:"<<ratio.get_d()<<endl;
 						foreach(target_ratios, target_ratio)
 						{
+							if(ratio != *target_ratio)
+								equal = false;
 							if(ratio < *target_ratio)
 								dominant = true;
 							if(ratio <= *target_ratio)
@@ -194,8 +196,6 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 								not_worse = true;
 								break;
 							}
-							if(ratio != *target_ratio)
-								equal = false;
 						}
 						if(!not_worse)
 							break;
@@ -235,20 +235,22 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 					}
 					utilization += step;
 				}
-				 while(utilization < u_range.max || fabs(u_range.max - utilization) < _EPS);
+				while(utilization < u_range.max || fabs(u_range.max - utilization) < _EPS);
 
 				if(not_worse && dominant)
 				{
 					exp_c++;
 					cout<<path<<endl;
 				}
+
 				if(equal)
 					exp_e++;
+
 				foreach(targets_success, ts)
 				{
 					foreach(others_success, os)
 					{
-						if(*ts<*os)
+						if(*ts<=*os)
 						{
 							better = false;
 							break;
@@ -257,10 +259,10 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 					if(!better)
 						break;
 				}
-				foreach(targets_success, ts)
-					cout<<"TS:"<<*ts<<endl;
-				foreach(others_success, os)
-							cout<<"OS:"<<*os<<endl;
+				// foreach(targets_success, ts)
+				// 	cout<<"TS:"<<*ts<<endl;
+				// foreach(others_success, os)
+				// 			cout<<"OS:"<<*os<<endl;
 				if(better)
 					exp_b++;
 			}
