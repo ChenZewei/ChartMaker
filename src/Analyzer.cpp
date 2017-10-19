@@ -242,6 +242,8 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 					exp_c++;
 					cout<<path<<endl;
 				}
+				else
+					cout<<"Not dominant:"<<path<<endl;
 
 				if(equal)
 					exp_e++;
@@ -276,9 +278,9 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
             strcat(base,"/");
             strcat(base,ptr->d_name);
 */
-			base = basePath;
-			base += "/";
-			base += ptr->d_name;
+						base = basePath;
+						base += "/";
+						base += ptr->d_name;
             readFileList(base, test_attributes);
         }
     }
