@@ -79,13 +79,13 @@ bool log_extract_by_line(SchedResultSet& srs, string bufline, Test_Attribute_Set
 		return false;
 //cout<<"success_time:"<<charbuf<<endl;
 	int_t success_time(charbuf);
-		
-	
-	SchedResult& sr = srs.get_sched_result(test_name, style);	
-		
+
+
+	SchedResult& sr = srs.get_sched_result(test_name, style);
+
 //cout<<sr.get_test_name()<<":"<<endl;
-	sr.insert_result(utilization.get_d(), exp_time.get_d(), success_time.get_d());	
-	
+	sr.insert_result(utilization.get_d(), exp_time.get_d(), success_time.get_d());
+
 	}
 	catch(exception &e)
 	{

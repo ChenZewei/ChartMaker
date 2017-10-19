@@ -72,13 +72,14 @@ int main(int argc, char** argv)
 		input_file.close();
 	}
 	
-	chart.SetGraphSize(1280, 720);
+	chart.SetGraphSize(1000, 600);
 	chart.SetGraphQual(3);
 	chart.AddData(srs);
 
 	chart.ExportLineChart("output/result", "", u_range.min, u_range.max, step, PNG|EPS);
-
 	string file_name = "output/result-logs.csv";
+	//chart.ExportLineChart("result", "", u_range.min, u_range.max, step, PNG|EPS);
+	//string file_name = "result-logs-new.csv";
 	ofstream output_file(file_name, ofstream::app);
 	double utilization = u_range.min;
 	do

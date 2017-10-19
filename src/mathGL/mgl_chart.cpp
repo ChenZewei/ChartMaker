@@ -29,7 +29,7 @@ string Chart::get_line_style(int index)
 {
 
 	if(color.size() <= index)
-	{	
+	{
 		stringstream buf;
 		buf<<"{x";
 		buf<<hex;
@@ -100,12 +100,16 @@ void Chart::SetGraphQual(int quality)
 
 void Chart::ExportLineChart(string path, const char* title, double min, double max, double step, int format)
 {
+	graph.SetMarkSize(1.5);
 	graph.Clf('w');
 	if(!(0 == strcmp(title, "")))
-		graph.Title(title,"",-2);	
+		graph.Title(title,"",-2);
 	graph.SetOrigin(0,0,0);
 	graph.SetRange('x', min, max);
-	graph.SetRange('y', 0, 1);	
+	graph.SetRange('y', 0, 1);
+	//graph.SetPlotFactor(1.2);
+	//graph.Perspective(0);
+	graph.ZoomAxis(mglPoint(0.5,0.5), mglPoint(0.5,0.5));
 
 	vector<Chart_Data> data_sets;
 
@@ -156,11 +160,12 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 			j++;
 		}
 	}
-	
+
 	graph.Box();
-	//graph.Label('x',"x: TaskSet Utilization", 0);
-	//graph.Label('y',"y: Ratio", 0);
+	//graph.Label('x',"taskset utilization", 0);
+	//graph.Label('y',"ratio", 0);
 	graph.Legend(0);
+	graph.Puts(mglPoint(0,0),"");
 	graph.Axis("xy");
 
 	string temp;
@@ -186,6 +191,9 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 		graph.WriteTGA(temp.data());
 	}
 
+	temp = path + ".tex";
+		graph.WriteTEX(temp.data());
+
 }
 
 void Chart::ExportJSON(string path)
@@ -198,17 +206,17 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 {
 	graph.Clf('w');
 	if("" != title)
-		graph.Title(title,"",-2);	
+		graph.Title(title,"",-2);
 	graph.SetOrigin(0,0,0);
 	graph.SetRange('x', min, max);
-	graph.SetRange('y', 0, 1);	
+	graph.SetRange('y', 0, 1);
 
 	for(int i = 0; i < data_set.size(); i++)
 	{
 		graph.Plot(data_set[i].data, get_line_style(i).c_str());
 		graph.AddLegend(data_set[i].name.c_str(), get_line_style(i).c_str());
 	}
-	
+
 	graph.Box();
 	//graph.Label('x',"x: TaskSet Utilization", 0);
 	//graph.Label('y',"y: Ratio", 0);
@@ -240,5 +248,3 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 
 }
 */
-
-
