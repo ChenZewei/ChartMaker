@@ -162,15 +162,16 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 	}
 
 	graph.Box();
-	//graph.Label('x',"taskset utilization", 0);
-	//graph.Label('y',"ratio", 0);
-	graph.Legend(0.5,1,"A#-");//0:left-down 1:right-down 2:left-up 3:right-up
-	graph.Puts(0.5,0.08,"taskset utilization","A:C");
-	graph.Puts(0.12,0.6,"r","A:C");
-	graph.Puts(0.12,0.55,"a","A:C");
-	graph.Puts(0.12,0.5,"t","A:C");
-	graph.Puts(0.12,0.45,"i","A:C");
-	graph.Puts(0.12,0.4,"o","A:C");
+	// graph.Label('x',"taskset utilization", 0);
+	// graph.Label('y',"ratio", 0);
+	// graph.Legend(0.5,1,"A#-");//0:left-down 1:right-down 2:left-up 3:right-up
+	graph.Legend(0);
+	// graph.Puts(0.5,0.08,"taskset utilization","A:C");
+	// graph.Puts(0.12,0.6,"r","A:C");
+	// graph.Puts(0.12,0.55,"a","A:C");
+	// graph.Puts(0.12,0.5,"t","A:C");
+	// graph.Puts(0.12,0.45,"i","A:C");
+	// graph.Puts(0.12,0.4,"o","A:C");
 	graph.Axis("xy");
 
 	string temp;
