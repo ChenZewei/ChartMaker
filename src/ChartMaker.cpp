@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 		path = "input/";
 	else
 		path = argv[1];
-	
+
 	//getFiles(path, dir);
 
 	vector<string> files;
@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 	for(uint i = 0; i < files.size(); i++)
 	{
 		ifstream input_file(files[i].data(), ifstream::in);
-	
+
 		while(getline(input_file, buf))
 		{
 //			cout<<buf<<endl;
@@ -71,12 +71,12 @@ int main(int argc, char** argv)
 
 		input_file.close();
 	}
-	
+
 	chart.SetGraphSize(1000, 600);
 	chart.SetGraphQual(3);
 	chart.AddData(srs);
 
-	chart.ExportLineChart("output/result", "", u_range.min, u_range.max, step, PNG|EPS);
+	chart.ExportLineChart("output/result", "", u_range.min, u_range.max, step, PNG|EPS|SVG);
 	string file_name = "output/result-logs.csv";
 	//chart.ExportLineChart("result", "", u_range.min, u_range.max, step, PNG|EPS);
 	//string file_name = "result-logs-new.csv";
@@ -100,8 +100,8 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-void getFiles(string path, string dir)  
-{  
+void getFiles(string path, string dir)
+{
 	string cmd = "ls " + path + " > " + path + dir;
 	system(cmd.data());
 }
@@ -120,7 +120,7 @@ void get_logs(string basePath, vector<string>& files)
     while ((ptr=readdir(dir)) != NULL)
     {
 		///current dir OR parrent dir
-        if(strcmp(ptr->d_name,".")==0 || strcmp(ptr->d_name,"..")==0)   
+        if(strcmp(ptr->d_name,".")==0 || strcmp(ptr->d_name,"..")==0)
             continue;
         else if(ptr->d_type == 8)    ///file
 		{
@@ -153,19 +153,3 @@ void get_logs(string basePath, vector<string>& files)
 
 	closedir(dir);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
