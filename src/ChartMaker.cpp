@@ -31,21 +31,9 @@ vector<Param> get_parameters();
 
 int main(int argc, char** argv)
 {
-	XML::LoadFile("config.xml");
-
-	Test_Attribute_Set test_attributes;
-	Double_Set steps;
-	Range_Set u_ranges;
-	XML::get_method(&test_attributes);
-	XML::get_utilization_range(&u_ranges);
-	XML::get_step(&steps);
-
 	vector<Param> parameters = get_parameters();
-
 	Param parameter = parameters[0];
 
-	// step = steps[0];
-	// u_range = u_ranges[0];
 	Chart chart;
 	SchedResultSet srs;
 	string path;
@@ -72,7 +60,7 @@ int main(int argc, char** argv)
 		while(getline(input_file, buf))
 		{
 //			cout<<buf<<endl;
-			log_extract_by_line(srs, buf, test_attributes);
+			log_extract_by_line(srs, buf, parameter.test_attributes);
 		}
 
 		input_file.close();
