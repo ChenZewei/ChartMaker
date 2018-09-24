@@ -106,7 +106,7 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 		graph.Title(title,"",-2);
 	graph.SetOrigin(0,0,0);
 	graph.SetRange('x', min, max);
-	graph.SetRange('y', 0, 1);
+	graph.SetRange('y', -0.02, 1.02);
 	//graph.SetPlotFactor(1.2);
 	//graph.Perspective(0);
 	graph.ZoomAxis(mglPoint(0.5,0.5), mglPoint(0.5,0.5));
@@ -160,12 +160,20 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 			j++;
 		}
 	}
-
+/*
+	graph.AddLegend(data_sets[0].name.c_str(), data_sets[0].style.c_str());
+	graph.AddLegend(data_sets[1].name.c_str(), data_sets[1].style.c_str());
+	graph.AddLegend(data_sets[2].name.c_str(), data_sets[2].style.c_str());
+	graph.AddLegend(data_sets[3].name.c_str(), data_sets[3].style.c_str());
+	graph.AddLegend(data_sets[4].name.c_str(), data_sets[4].style.c_str());
+	graph.AddLegend(data_sets[5].name.c_str(), data_sets[5].style.c_str());
+	graph.AddLegend(data_sets[6].name.c_str(), data_sets[6].style.c_str());
+*/
+	graph.Grid("xy","{xb0b0b0}=");
 	graph.Box();
-	graph.SetFontSize(3);
-	graph.Label('y',"schedulable ratio", 0);
-	graph.Label('x',"total utilization", 0);
 	// graph.Legend(0.5,1,"A#-");//0:left-down 1:right-down 2:left-up 3:right-up
+	graph.SetFontSize(3);
+	// graph.Legend(0.3, 1, "A#-");//0:left-down 1:right-down 2:left-up 3:right-up
 	graph.Legend(0);
 	// graph.Puts(0.5,0.08,"taskset utilization","A:C");
 	// graph.Puts(0.12,0.6,"r","A:C");
@@ -173,7 +181,11 @@ void Chart::ExportLineChart(string path, const char* title, double min, double m
 	// graph.Puts(0.12,0.5,"t","A:C");
 	// graph.Puts(0.12,0.45,"i","A:C");
 	// graph.Puts(0.12,0.4,"o","A:C");
+
 	graph.Axis("xy");
+	graph.SetFontSize(3);
+	graph.Label('y',"schedulable ratio", 0);
+	graph.Label('x',"total utilization", 0);
 
 	string temp;
 

@@ -20,6 +20,11 @@ string SchedResult::get_test_name()
 }
 
 
+void SchedResult::set_test_name(string name) {
+	test_name = name;
+}
+
+
 string SchedResult::get_line_style()
 {
 	return line_style;

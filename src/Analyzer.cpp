@@ -248,19 +248,49 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 				if(equal)
 					exp_e++;
 
+				// OR
+				uint ts_size = targets_success.size();
 				foreach(targets_success, ts)
 				{
+					// uint os_size = others_sucess.size();
+					bool temp_better = true;
 					foreach(others_success, os)
 					{
 						if(*ts<=*os)
 						{
-							better = false;
+							// better = false;
+							// break;
+							// os_size--;
+							temp_better = false;
 							break;
 						}
 					}
-					if(!better)
-						break;
+					// if(!better)
+					// 	break;
+					if(!temp_better)
+					{
+						ts_size--;
+					}
 				}
+				if(0 == ts_size)
+					better = false;
+
+				// AND
+				// foreach(targets_success, ts)
+				// {
+				// 	foreach(others_success, os)
+				// 	{
+				// 		if(*ts<=*os)
+				// 		{
+				// 			better = false;
+				// 			break;
+				// 		}
+				// 	}
+				// 	if(!better)
+				// 		break;
+				// }
+
+
 				// foreach(targets_success, ts)
 				// 	cout<<"TS:"<<*ts<<endl;
 				// foreach(others_success, os)

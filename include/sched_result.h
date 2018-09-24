@@ -15,6 +15,7 @@ class SchedResult
 	public:
 		SchedResult(string name, string line_style = "");
 		string get_test_name();
+		void set_test_name(string name);
 		string get_line_style();
 		void insert_result(double utilization, uint e_time, uint s_time);
 		vector<Result>& get_results();
