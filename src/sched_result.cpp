@@ -4,7 +4,7 @@
 template <typename TaskModel>
 int increase_order(TaskModel t1, TaskModel t2)
 {
-	return t1.utilization < t2.utilization;
+	return t1.x < t2.x;
 }
 
 SchedResult::SchedResult(string name, string style)
@@ -30,32 +30,28 @@ string SchedResult::get_line_style()
 	return line_style;
 }
 
-void SchedResult::insert_result(double utilization, uint e_time, uint s_time)
-{
-	bool exist = false;
+void SchedResult::insert_result(double x, uint e_time, uint s_time) {
+  bool exist = false;
 
-	foreach(results, result)
-	{
-		if(abs(result->utilization - utilization) <= _EPS)
-		{
-			exist = true;
-			result->exp_num += e_time;
-			result->success_num += s_time;
-			break;
-		}
-	}
+  foreach(results, result) {
+    if (fabs(result->x - x) <= _EPS) {
+      exist = true;
+      result->exp_num += e_time;
+      result->success_num += s_time;
+      break;
+    }
+  }
 
-	if(!exist)
-	{
-		Result temp;
-		temp.utilization = utilization;
-		temp.exp_num = e_time;
-		temp.success_num = s_time;
+  if (!exist) {
+    Result temp;
+    temp.x = x;
+    temp.exp_num = e_time;
+    temp.success_num = s_time;
 
-		results.push_back(temp);
+    results.push_back(temp);
 
-		sort(results.begin(), results.end(), increase_order<Result>);
-	}
+    sort(results.begin(), results.end(), increase_order<Result>);
+  }
 }
 
 vector<Result>& SchedResult::get_results()
@@ -63,21 +59,40 @@ vector<Result>& SchedResult::get_results()
 	return results;
 }
 
-Result SchedResult::get_result_by_utilization(double utilization)
-{
-	Result empty;
-	empty.utilization = 0;
-	empty.exp_num = 0;
-	empty.success_num = 0;
+Result SchedResult::get_result_by_utilization(double utilization) {
+  Result empty;
+  empty.x = 0;
+  empty.exp_num = 0;
+  empty.success_num = 0;
 
-	foreach(results, result)
-	{
-		if(abs(result->utilization - utilization) <= _EPS)
-		{
-			return *result;
-		}
-	}
-	return empty;
+  foreach(results, result) {
+    if (fabs(result->x - utilization) <= _EPS) {
+      return *result;
+    }
+  }
+  return empty;
+}
+
+Result SchedResult::get_result_by_x(double x) {
+  Result empty;
+  empty.x = 0;
+  empty.exp_num = 0;
+  empty.success_num = 0;
+
+  foreach(results, result) {
+    if (fabs(result->x - x) <= _EPS) {
+      return *result;
+    }
+  }
+  return empty;
+}
+
+void SchedResult::display_result() {
+  cout << "TestName:" << test_name << endl;
+  foreach(results, r) {
+    cout << "u:" << r->x << " exp:" << r->exp_num
+         << " success:" << r->success_num << endl;
+  }
 }
 
 /////////////////////////////////////////////////////////

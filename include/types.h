@@ -1,21 +1,25 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include <assert.h>
+#include <gmpxx.h>  // including GNU Multiple Precision Arithmetic Library
+#include <math.h>
 #include <string.h>
-//including GNU Multiple Precision Arithmetic Library
-#include <gmpxx.h>
-#include <vector>
+#include <time.h>
+#include <iostream>
 #include <list>
 #include <set>
-#include <math.h>
-#include <time.h>
+#include <string>
+#include <vector>
 #include "iteration-helper.h"
 
-#define uint unsigned int
-#define ulong unsigned long
+#define uint uint32_t
+#define ulong uint64_t
 
 #define MAX_LONG 0xffffffffffffffff
-#define MAX_INT  0xffffffff
+#define MAX_INT 0xffffffff
+#define MAX_ULONG 0xffffffffffffffff
+#define MAX_UINT 0xffffffff
 #define _EPS 0.000001
 
 //output file format
@@ -26,6 +30,13 @@
 #define JSON 	0x10
 
 using namespace std;
+using std::cout;
+using std::endl;
+using std::list;
+using std::set;
+using std::string;
+using std::vector;
+
 
 typedef mpz_class int_t;		//multiple precision integer
 typedef mpq_class fraction_t;		//multiple precision rational number
@@ -33,7 +44,7 @@ typedef mpf_class floating_t;		//multiple precision float number
 
 typedef struct
 {
-	double utilization;
+	double x;
 	uint exp_num;
 	uint success_num;
 }Result;
@@ -67,5 +78,6 @@ typedef vector<Result_Set> Result_Sets;
 typedef vector<Test_Attribute> Test_Attribute_Set;
 typedef list<void*> TaskQueue;
 typedef list<void*> ResourceQueue;
+typedef vector<double> Ratio;
 
 #endif
