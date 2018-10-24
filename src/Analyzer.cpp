@@ -124,7 +124,7 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 					}
 				}
 
-/*
+
 				foreach(targets, test)
 				{
 					cout<<"Target:"<<*test<<endl;
@@ -134,7 +134,7 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 				{
 					cout<<"Others:"<<*test<<endl;
 				}
-*/
+
 
 				SchedResult& obj = srs.get_sched_result(test_attributes[0].rename);
 				bool not_worse;

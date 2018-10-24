@@ -93,7 +93,7 @@ void Chart::ExportLineChart(string path, string title, double min, double max,
 		graph.Title(title.data(),"",-2);
   graph.SetOrigin(0, 0, 0);
   graph.SetRange('x', min, max);
-  graph.SetRange('y', 0, 1);
+  graph.SetRange('y', -0.02, 1.02);
 	graph.ZoomAxis(mglPoint(0.5,0.5), mglPoint(0.5,0.5));
 
   vector<Chart_Data> data_sets;

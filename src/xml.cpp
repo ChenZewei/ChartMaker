@@ -203,11 +203,19 @@ void XML::get_integers(Int_Set *i_set, const char *element_name) {
   const char *content;
   XMLElement *root = config.RootElement();
   XMLElement *title = root->FirstChildElement(element_name);
-  XMLElement *subtitle = title->FirstChildElement("data");
-  while (subtitle) {
-    content = subtitle->GetText();
-    i_set->push_back(atoi(content));
-    subtitle = subtitle->NextSiblingElement();
+  if (NULL == title) {
+    i_set->push_back(0);
+  } else {
+    XMLElement *subtitle = title->FirstChildElement("data");
+    if (NULL == subtitle) {
+      i_set->push_back(0);
+    } else {
+      while (subtitle) {
+        content = subtitle->GetText();
+        i_set->push_back(atoi(content));
+        subtitle = subtitle->NextSiblingElement();
+      }
+    }
   }
 }
 
@@ -215,12 +223,20 @@ void XML::get_doubles(Double_Set *d_set, const char *element_name) {
   const char *content;
   XMLElement *root = config.RootElement();
   XMLElement *title = root->FirstChildElement(element_name);
-  XMLElement *subtitle = title->FirstChildElement("data");
-  while (subtitle) {
-    content = subtitle->GetText();
-    floating_t temp(content);
-    d_set->push_back(temp.get_d());
-    subtitle = subtitle->NextSiblingElement();
+  if (NULL == title) {
+    d_set->push_back(1.0);
+  } else {
+    XMLElement *subtitle = title->FirstChildElement("data");
+    if (NULL == subtitle) {
+      d_set->push_back(1.0);
+    } else {
+      while (subtitle) {
+        content = subtitle->GetText();
+        floating_t temp(content);
+        d_set->push_back(temp.get_d());
+        subtitle = subtitle->NextSiblingElement();
+      }
+    }
   }
 }
 
@@ -228,57 +244,97 @@ void XML::get_ranges(Range_Set *r_set, const char *element_name) {
   const char *content;
   XMLElement *root = config.RootElement();
   XMLElement *title = root->FirstChildElement(element_name);
-  XMLElement *subtitle = title->FirstChildElement("data");
-  while (subtitle) {
+  if (NULL == title) {
     Range temp;
-    XMLElement *SSubtitle = subtitle->FirstChildElement("min");
-    content = SSubtitle->GetText();
-    floating_t data(content);
-    temp.min = data.get_d();
-    SSubtitle = subtitle->FirstChildElement("max");
-    content = SSubtitle->GetText();
-    data = content;
-    temp.max = data.get_d();
+    temp.min = 0;
+    temp.max = 1;
     r_set->push_back(temp);
-    subtitle = subtitle->NextSiblingElement();
+  } else {
+    XMLElement *subtitle = title->FirstChildElement("data");
+    if (NULL == subtitle) {
+      Range temp;
+      temp.min = 0;
+      temp.max = 1;
+      r_set->push_back(temp);
+    } else {
+      while (subtitle) {
+        Range temp;
+        XMLElement *SSubtitle = subtitle->FirstChildElement("min");
+        content = SSubtitle->GetText();
+        floating_t data(content);
+        temp.min = data.get_d();
+        SSubtitle = subtitle->FirstChildElement("max");
+        content = SSubtitle->GetText();
+        data = content;
+        temp.max = data.get_d();
+        r_set->push_back(temp);
+        subtitle = subtitle->NextSiblingElement();
+      }
+    } 
   }
+
 }
 
 int XML::get_integer(const char* element_name) {
   const char *content;
   XMLElement *root = config.RootElement();
   XMLElement *title = root->FirstChildElement(element_name);
-  XMLElement *subtitle = title->FirstChildElement("data");
-  content = subtitle->GetText();
-  if (NULL == content) {
-    return 0;
+  if (NULL == title) {
+      return 0;
+  } else {
+    XMLElement *subtitle = title->FirstChildElement("data");
+    if (NULL == subtitle) {
+      return 0;
+    } else {
+      content = subtitle->GetText();
+      if (NULL == content) {
+        return 0;
+      }
+      return atoi(content);
+    }
   }
-  return atoi(content);
+
 }
 
 double XML::get_double(const char* element_name) {
   const char *content;
   XMLElement *root = config.RootElement();
   XMLElement *title = root->FirstChildElement(element_name);
-  XMLElement *subtitle = title->FirstChildElement("data");
-  content = subtitle->GetText();
-  floating_t temp(content);
-  if (NULL == content) {
-    return 0;
+  if (NULL == title) {
+      return 0;
+  } else {
+    XMLElement *subtitle = title->FirstChildElement("data");
+    if (NULL == subtitle) {
+      return 0;
+    } else {
+      content = subtitle->GetText();
+      floating_t temp(content);
+      if (NULL == content) {
+        return 0;
+      }
+      return temp.get_d();
+    }
   }
-  return temp.get_d();
 }
 
 string XML::get_string(const char* element_name) {
   const char *content;
   XMLElement *root = config.RootElement();
   XMLElement *title = root->FirstChildElement(element_name);
-  XMLElement *subtitle = title->FirstChildElement("data");
-  content = subtitle->GetText();
-  if (NULL == content) {
+  if (NULL == title) {
     return "";
+  } else {
+    XMLElement *subtitle = title->FirstChildElement("data");
+    if (NULL == subtitle) {
+      return "";
+    } else {
+      content = subtitle->GetText();
+      if (NULL == content) {
+        return "";
+      }
+      return content;
+    }
   }
-  return content;
 }
 
 // resource

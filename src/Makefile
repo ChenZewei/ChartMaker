@@ -18,7 +18,7 @@ DEL_DIR       = rmdir
 MOVE          = mv -f
 MKDIR         = mkdir -p
 TARGET	      = ChartMaker
-OBJ_FILE	  = sched_result.o data_extractor.o mgl_chart.o xml.o tinyxml2.o random_gen.o
+OBJ_FILE	  = sched_result.o data_extractor.o mgl_chart.o xml.o tinyxml2.o random_gen.o param.o  
 
 ChartMaker:ChartMaker.o $(OBJ_FILE)  
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o $(TARGET) ChartMaker.o $(OBJ_FILE) $(LFLAGS) $(LIBS)
@@ -58,4 +58,7 @@ tinyxml2.o:tinyxml2.cpp
 
 random_gen.o:random_gen.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -c random_gen.cpp $(LIBS)
+
+param.o:param.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -c param.cpp $(LIBS)
 
