@@ -36,8 +36,8 @@ int main()
 	Double_Set steps;
 	Range_Set u_ranges;
 	XML::get_method(&test_attributes);
-	XML::get_utilization_range(&u_ranges);
-	XML::get_step(&steps);
+  	XML::get_ranges(&u_ranges, "reserve_range_1");
+	XML::get_doubles(&steps, "reserve_double_1");
 
 	step = steps[0];
 	u_range = u_ranges[0];
@@ -108,6 +108,7 @@ int readFileList(string basePath, Test_Attribute_Set& test_attributes)
 
 				foreach(test_attributes, ta)
 				{
+					cout << ta->rename.data() << " " << ta->cluster << endl;
 					if(0 == ta->cluster)
 					{
 						if(0 == strcmp(ta->rename.data(), ""))

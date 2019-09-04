@@ -23,6 +23,9 @@ void read_line(string path, vector<string>& files)
 bool log_extract_by_line(SchedResultSet& srs, string bufline, Test_Attribute_Set set)
 {
 	char *charbuf;
+	char *ptr = NULL;
+	// char buffer[100] = bufline.data();
+	char *buf = const_cast<char*>(bufline.data());
 	string style;
 	bool check = false;
 	uint index;
@@ -32,7 +35,7 @@ bool log_extract_by_line(SchedResultSet& srs, string bufline, Test_Attribute_Set
 	try
 	{
 //extract test name
-	charbuf = strtok(bufline.data(), "\t\n");
+	charbuf = strtok_r(buf, "\t\n", &ptr);
 	if(NULL == charbuf)
 		return false;
 //cout<<"test_name:"<<charbuf<<endl;
@@ -60,21 +63,21 @@ bool log_extract_by_line(SchedResultSet& srs, string bufline, Test_Attribute_Set
 	}
 
 //extract utilization
-	charbuf = strtok(NULL, "\t\n");
+	charbuf = strtok_r(NULL, "\t\n", &ptr);
 	if(NULL == charbuf)
 		return false;
 //cout<<"utilization:"<<charbuf<<endl;
 	floating_t utilization(charbuf);
 
 //extract experiment times
-	charbuf = strtok(NULL, "\t\n");
+	charbuf = strtok_r(NULL, "\t\n", &ptr);
 	if(NULL == charbuf)
 		return false;
 //cout<<"exp_time:"<<charbuf<<endl;
 	int_t exp_time(charbuf);
 
 //extract success times
-	charbuf = strtok(NULL, "\t\n");
+	charbuf = strtok_r(NULL, "\t\n", &ptr);
 	if(NULL == charbuf)
 		return false;
 //cout<<"success_time:"<<charbuf<<endl;
@@ -98,6 +101,9 @@ bool log_extract_by_line(SchedResultSet& srs, string bufline, Test_Attribute_Set
 void extract_element(vector<floating_t>& elements, string bufline, uint start, uint num, const char seperator)
 {
 	char *charbuf;
+	// char buffer[100] = bufline.data();
+	char *buf = const_cast<char*>(bufline.data());
+	char *ptr = NULL;
 	string cut = " \t\r\n";
 	cut += seperator;
 
@@ -105,18 +111,30 @@ void extract_element(vector<floating_t>& elements, string bufline, uint start, u
 
 	try
 	{
-		if(NULL != (charbuf = strtok(bufline.data(), cut.data())))
-			do
-			{
-				if(count >= start && count < start + num)
+		while (NULL != (charbuf = strtok_r(buf, cut.data(), &ptr))) {
+			if(count >= start && count < start + num)
 				{
 					cout<<"element:"<<charbuf<<endl;
 					floating_t element(charbuf, 100);
 					elements.push_back(element);
 				}
 				count++;
-			}
-			while(NULL != (charbuf = strtok(NULL, cut.data())));
+				buf = NULL;
+		}
+
+		// Deprecated. (strtok(...))
+		// if(NULL != (charbuf = strtok(bufline.data(), cut.data())))
+		// 	do
+		// 	{
+		// 		if(count >= start && count < start + num)
+		// 		{
+		// 			cout<<"element:"<<charbuf<<endl;
+		// 			floating_t element(charbuf, 100);
+		// 			elements.push_back(element);
+		// 		}
+		// 		count++;
+		// 	}
+		// 	while(NULL != (charbuf = strtok(NULL, cut.data())));
 	}
 	catch(exception &e)
 	{

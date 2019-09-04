@@ -41,6 +41,7 @@ void XML::get_method(Test_Attribute_Set *t_set) {
     string remark;
     string rename;
     string style;
+	uint cluster;
     if (NULL == subtitle->Attribute("REMARK"))
       remark = "";
     else
@@ -53,6 +54,10 @@ void XML::get_method(Test_Attribute_Set *t_set) {
       style = "";
     else
       style = subtitle->Attribute("STYLE");
+	if (NULL == subtitle->Attribute("CLUSTER"))
+		cluster = 0;
+	else
+		cluster = atoi(subtitle->Attribute("CLUSTER"));
     int transform = 0;
     if (0 == strcmp(content, "P-EDF")) {
       transform = 0;
@@ -89,6 +94,7 @@ void XML::get_method(Test_Attribute_Set *t_set) {
     ta.remark = remark;
     ta.rename = rename;
     ta.style = style;
+	ta.cluster = cluster;
     t_set->push_back(ta);
     subtitle = subtitle->NextSiblingElement();
   }
@@ -108,6 +114,19 @@ void XML::get_lambda(Int_Set *i_set) {
   while (subtitle) {
     content = subtitle->GetText();
     i_set->push_back(atoi(content));
+    subtitle = subtitle->NextSiblingElement();
+  }
+}
+
+void XML::get_mean(Double_Set *d_set) {
+  const char *content;
+  XMLElement *root = config.RootElement();
+  XMLElement *title = root->FirstChildElement("mean");
+  XMLElement *subtitle = title->FirstChildElement("data");
+  while (subtitle) {
+    content = subtitle->GetText();
+    floating_t temp(content);
+    d_set->push_back(temp.get_d());
     subtitle = subtitle->NextSiblingElement();
   }
 }

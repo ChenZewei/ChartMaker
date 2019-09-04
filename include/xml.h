@@ -40,6 +40,8 @@ class XML {
 
   static void get_lambda(Int_Set* i_set);
 
+  static void get_mean(Double_Set *d_set);
+
   static void get_period_range(Range_Set* r_set);
 
   static void get_deadline_propotion(Range_Set* r_set);

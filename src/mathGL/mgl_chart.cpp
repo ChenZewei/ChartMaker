@@ -138,12 +138,12 @@ void Chart::ExportLineChart(string path, string title, double min, double max,
 
   graph.Grid("xy","{xb0b0b0}=");
 	graph.Box();
-	graph.SetFontSize(3);
-	// graph.Legend(0.3, 1, "A#-");  // 0:left-down 1:right-down 2:left-up 3:right-up
+	graph.SetFontSize(4);
+	// graph.Legend(0.3, 1, "A#-");  // out of the chart
 	graph.Legend(pos);  // 0:left-down 1:right-down 2:left-up 3:right-up
 
 	graph.Axis("xy");
-	graph.SetFontSize(3);
+	graph.SetFontSize(4);
 	if(!(0 == strcmp(x_label.data(), "")))
 	  graph.Label('x',x_label.data(), 0);
 	if(!(0 == strcmp(y_label.data(), "")))
