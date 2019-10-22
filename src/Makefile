@@ -8,7 +8,7 @@ GTKCFLAGS	  =	`pkg-config gtkmm-3.0 --cflags`
 GTKLIBS	  	  =	`pkg-config gtkmm-3.0 --libs`
 INCPATH       = -I. -I../include -I../include/mathGL
 LINK          = g++
-LFLAGS        = -Wl,-O1
+LFLAGS        = #-Wl,-O1
 LIBS          = -lgmp -lgmpxx -lmgl -lpthread -lglpk
 COPY          = cp -f
 COPY_FILE     = cp -f
@@ -26,6 +26,9 @@ ChartMaker:ChartMaker.o $(OBJ_FILE)
 Analyzer:Analyzer.o $(OBJ_FILE)  
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o Analyzer Analyzer.o $(OBJ_FILE)  $(LFLAGS) $(LIBS)
 
+logCompress:logCompress.o $(OBJ_FILE)  
+	$(CXX) $(CXXFLAGS) $(INCPATH) -o logCompress logCompress.o $(OBJ_FILE)  $(LFLAGS) $(LIBS)
+
 test:test.o $(OBJ_FILE)  
 	$(CXX) $(CXXFLAGS) $(INCPATH) -o test test.o $(OBJ_FILE)  $(LFLAGS) $(LIBS)
 
@@ -34,6 +37,9 @@ ChartMaker.o:ChartMaker.cpp
 
 Analyzer.o:Analyzer.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -c Analyzer.cpp $(LIBS)
+
+logCompress.o:logCompress.cpp
+	$(CXX) $(CXXFLAGS) $(INCPATH) -c logCompress.cpp $(LIBS)
 
 test.o:test.cpp
 	$(CXX) $(CXXFLAGS) $(INCPATH) -c test.cpp $(LIBS)
