@@ -5,3 +5,5 @@ grep "LL-EE-vpr" * -R | awk -F: '{print $1}' | sort | uniq | xargs sed -i 's/LL-
 grep "R-PCP-rm" * -R | awk -F: '{print $1}' | sort | uniq | xargs sed -i 's/R-PCP-rm/R-PCP/g'
 grep "R-PCP-rm-opa" * -R | awk -F: '{print $1}' | sort | uniq | xargs sed -i 's/R-PCP-rm-opa/R-PCP-opa/g'
 grep "R-NP-rm" * -R | awk -F: '{print $1}' | sort | uniq | xargs sed -i 's/R-NP-rm/R-NP/g'
+grep "hybrid-HEAVY" * -R | awk -F: '{print $1}' | sort | uniq | xargs sed -i 's/hybrid-HEAVY/H-HEAVY/g'
+grep "hybrid-WF" * -R | awk -F: '{print $1}' | sort | uniq | xargs sed -i 's/hybrid-WF/H-WF/g'
